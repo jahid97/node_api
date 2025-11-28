@@ -1,0 +1,146 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>API Frontend</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #f5f7fa;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container { max-width: 700px; margin: auto; }
+        h1 { text-align: center; margin-bottom: 25px; }
+        .card { background: white; padding: 20px; margin-bottom: 20px; border-radius: 10px; box-shadow: 0 3px 10px rgba(0,0,0,0.1); }
+        button { background: #1a73e8; border: none; padding: 8px 15px; color: white; border-radius: 6px; cursor: pointer; margin-top:5px; }
+        button:hover { background: #125ec2; }
+        input, textarea { width: 100%; padding: 10px; margin-top: 10px; margin-bottom: 10px; border-radius: 6px; border: 1px solid #ccc; }
+        .comment-box { background: #eef3ff; padding: 12px; margin: 10px 0; border-radius: 6px; }
+        .comment-box button { background: #ff4d4f; margin-left: 5px; }
+    </style>
+</head>
+<body>
+<div class="container">
+    <h1>My Node.js API Demo</h1>
+
+    <!-- Outfit Generator -->
+    <div class="card">
+        <h2>Random Outfit</h2>
+        <button onclick="getOutfit()">Get Outfit</button>
+        <p id="outfitResult"></p>
+    </div>
+
+    <!-- Add Comment -->
+    <div class="card">
+        <h2>Add Comment</h2>
+        <textarea id="commentInput" placeholder="Write a comment..."></textarea>
+        <button onclick="addComment()">Submit</button>
+        <p id="addResult"></p>
+    </div>
+
+    <!-- Get Comment By ID -->
+    <div class="card">
+        <h2>Get Comment by ID</h2>
+        <input type="text" id="commentID" placeholder="Enter comment ID">
+        <button onclick="getComment()">Fetch</button>
+        <p id="commentByIdResult"></p>
+        <p>make sure put /comments/ before id if you want access by link</p>
+    </div>
+
+    <!-- Load All Comments -->
+    <div class="card">
+        <h2>All Comments</h2>
+        <button onclick="loadAllComments()">Load Comments</button>
+        <div id="allComments"></div>
+    </div>
+</div>
+
+<script>
+const BASE_URL = "http://localhost:3000";
+
+// --- Outfit 
+async function getOutfit() {
+    const res = await fetch(`${BASE_URL}/outfit`);
+    const data = await res.json();
+    document.getElementById("outfitResult").innerText =
+        `Top: ${data.top}, Bottom: ${data.jeans}, Shoes: ${data.shoes}`;
+}
+
+// --- Add comment 
+async function addComment() {
+    const content = document.getElementById("commentInput").value;
+    const res = await fetch(`${BASE_URL}/comments`, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content })
+    });
+    const data = await res.json();
+    document.getElementById("addResult").innerText = `Comment added! ID: ${data.id}`;
+}
+
+// --- Get comment by Id
+async function getComment() {
+    const id = document.getElementById("commentID").value;
+    const res = await fetch(`${BASE_URL}/comments/${id}`);
+    if (res.status === 404) {
+        document.getElementById("commentByIdResult").innerText = "Not found!";
+        return;
+    }
+    const data = await res.json();
+    document.getElementById("commentByIdResult").innerText = data.content;
+}
+
+// --- Load all comments
+async function loadAllComments() {
+    const res = await fetch(`${BASE_URL}/comments`);
+    const comments = await res.json();
+    const container = document.getElementById("allComments");
+    container.innerHTML = "";
+
+    comments.forEach(c => {
+        const div = document.createElement("div");
+        div.className = "comment-box";
+        div.innerHTML = `
+            <b>ID:</b> ${c.id}<br>${c.content}<br>
+            <button onclick="deleteComment('${c.id}')">Delete</button>
+            <button onclick="updateCommentPrompt('${c.id}', '${c.content.replace(/'/g, "\\'")}')">Update</button>
+        `;
+        container.appendChild(div);
+    });
+}
+
+// --- Delete comment 
+async function deleteComment(id) {
+    const res = await fetch(`${BASE_URL}/comments/${id}`, { method: "DELETE" });
+    if (res.status === 200) {
+        alert("Deleted successfully!");
+        loadAllComments();
+    } else {
+        alert("Error deleting comment");
+    }
+}
+
+// --- Update comment 
+function updateCommentPrompt(id, oldContent) {
+    const newContent = prompt("Edit comment:", oldContent);
+    if (!newContent) return;
+    updateComment(id, newContent);
+}
+async function updateComment(id, newContent) {
+    const res = await fetch(`${BASE_URL}/comments/${id}`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ content: newContent })
+    });
+    if (res.status === 200) {
+        alert("Updated successfully!");
+        loadAllComments();
+    } else {
+        alert("Error updating comment");
+    }
+}
+</script>
+</body>
+</html>
