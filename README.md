@@ -1,8 +1,10 @@
-# My Project: Outfit & Comment API
+# Outfit Suggestion & Comment API
+
+## Live : https://restful-api-mi05.onrender.com/
 
 ## 📝 Description
 
-This project is a simple backend API built with Node.js and Express. It serves two main purposes:
+This project is a simple backend RESTful API built with Node.js and Express. It serves two main purposes:
 
 1.  **Outfit Generator:** Provides a random suggestion for a top, bottom (jeans/trousers), and shoes.
 2.  **Comment Manager:** A basic RESTful API that allows users to create, view, update, and delete comments. Comments are persisted on the file system in the `data/comments` directory.
@@ -49,19 +51,18 @@ A basic web interface is available at the root URL (`/`) which demonstrates how 
 To start the server, use the defined `start` script:
 
 ```bash
-npm start
+node index.js
 ```
 
 The server will start on port 3000 (or the one configured in index.js).
 
-Accessing the Application
+Accessing the Application if you are running it on local
 API Root: http://localhost:3000
 
-Frontend (Comment Manager Demo): http://localhost:3000/ (Serves public/index.html)
-
-Outfit Endpoint: http://localhost:3000/outfit
+Project live link: https://restful-api-mi05.onrender.com/
 
 ## ⚙️ Project Structure
+```bash
 my_project/
 ├── data/
 │   └── comments/       # Stores individual comment files (.txt)
@@ -70,6 +71,7 @@ my_project/
 ├── index.js            # Main Express server and API logic
 ├── package.json        # Project metadata and dependencies
 └── README.md           # This file
+```
 
 
 ## 🛠️ Technologies Used
