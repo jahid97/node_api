@@ -1,68 +1,86 @@
-# Create README.md file with provided content
-content = """# Clothing Store API + Frontend
+# My Project: Outfit & Comment API
 
-A simple full-stack project that includes a Node.js REST API and a static frontend for browsing clothing categories. Built for learning and showcasing full-stack development skills.
+## 📝 Description
 
----
+This project is a simple backend API built with Node.js and Express. It serves two main purposes:
 
-## 🚀 Features
+1.  **Outfit Generator:** Provides a random suggestion for a top, bottom (jeans/trousers), and shoes.
+2.  **Comment Manager:** A basic RESTful API that allows users to create, view, update, and delete comments. Comments are persisted on the file system in the `data/comments` directory.
 
-✔ Node.js + Express backend  
-✔ Static HTML/CSS/JS frontend  
-✔ API provides clothing data (tops, bottoms, shoes, etc.)  
-✔ Fetches and displays data dynamically on the frontend  
-✔ Deployed live for portfolio demonstration  
+The project also includes a simple static HTML/JavaScript frontend located in the `public/` folder to demonstrate the Comment Manager API's functionality.
 
----
+## ✨ Features
 
-## 🛠️ Tech Stack
+### API Endpoints
+| HTTP Method | Endpoint | Description |
+| :--- | :--- | :--- |
+| **GET** | `/outfit` | Generates a random outfit (top, jeans, shoes). |
+| **POST** | `/comments` | Creates a new comment. (Requires `content` in request body) |
+| **GET** | `/comments` | Retrieves all existing comments. |
+| **PUT** | `/comments/:id` | Updates a specific comment by ID. (Requires `content` in request body) |
+| **DELETE** | `/comments/:id` | Deletes a specific comment by ID. |
+| **GET** | `/health` | Simple health check endpoint. |
 
-| Layer | Technology |
-|------|------------|
-| Frontend | HTML, CSS, JavaScript |
-| Backend | Node.js, Express.js |
-| Hosting (frontend) | GitHub Pages |
-| Hosting (backend) | Render.com |
+### Frontend
+A basic web interface is available at the root URL (`/`) which demonstrates how to interact with the Comment Manager API using vanilla JavaScript (fetch API).
 
----
+## 🚀 Installation and Setup
 
-## 📂 Project Structure
+### Prerequisites
+* Node.js (v18 or higher recommended)
+
+### Steps
+
+1.  **Clone or Download:** Ensure you have the project files.
+2.  **Install Dependencies:** Open your terminal in the project root directory and run:
+
+    ```bash
+    npm install
+    ```
+
+3.  **Data Directory:** Make sure the data directory for comments exists:
+
+    ```bash
+    mkdir -p data/comments
+    ```
+
+## ▶️ Running the Project
+
+To start the server, use the defined `start` script:
+
+```bash
+npm start
+```
+
+The server will start on port 3000 (or the one configured in index.js).
+
+Accessing the Application
+API Root: http://localhost:3000
+
+Frontend (Comment Manager Demo): http://localhost:3000/ (Serves public/index.html)
+
+Outfit Endpoint: http://localhost:3000/outfit
+
+## ⚙️ Project Structure
 my_project/
 ├── data/
-│ └── clothing.js (data arrays)
+│   └── comments/       # Stores individual comment files (.txt)
 ├── public/
-│ └── index.html (UI)
-├── index.js (Express server & API)
-├── .gitignore
-├── package.json
-└── README.md
+│   └── index.html      # Frontend for the Comment Manager
+├── index.js            # Main Express server and API logic
+├── package.json        # Project metadata and dependencies
+└── README.md           # This file
 
 
+## 🛠️ Technologies Used
+Node.js
 
----
+Express.js (Web framework)
 
-## ▶️ How to Run Locally
+uuid (For generating unique IDs for comments)
 
-1️⃣ Clone the repository  
-```bash
-git clone https://github.com/your-username/my_project.git
+lodash (Utility library, used for random outfit selection)
 
-npm install
+cors (For enabling Cross-Origin Resource Sharing)
 
-node index.js
-
-http://localhost:5000
-
-Live Demo
-
-🔹 Frontend (GitHub Pages):
-
-https://your-username.github.io/my_project
-
-🔹 Backend API (Render):
-
-https://your-api-service.onrender.com/api/clothes
-
-
-
-
+morgan (HTTP request logger)
